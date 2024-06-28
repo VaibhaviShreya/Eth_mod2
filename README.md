@@ -22,22 +22,17 @@ Before you begin, ensure you have met the following requirements:
 
 ## Deployment
 
-1. Compile the smart contracts:
-    ```
-    npx hardhat compile
-    ```
-
-2. Deploy the smart contract to a local Hardhat network:
+1. Deploy the smart contract to a local Hardhat network:
     ```
     npx hardhat node
     ```
 
-3. In a new terminal, run the deployment script:
+2. In a new terminal, run the deployment script:
     ```
     npx hardhat run scripts/deploy.js --network localhost
     ```
 
-4. Note the deployed contract address from the output.
+3. Note the deployed contract address from the output.
 
 ## Frontend Setup
 
