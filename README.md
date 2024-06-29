@@ -55,21 +55,115 @@ Before you begin, ensure you have met the following requirements:
 
 ## Contract Methods
 
-### `getFunds() public view returns(uint256)`
+### Addmoney
 
-Returns the total funds in the supermarket.
+```solidity
+function Addmoney(address _customer, uint256 _amount) public
+```
 
-### `getName() public view returns(string memory)`
+- Adds funds to the customer's balance.
+- Updates the total funds available in the contract.
 
-Returns the customer's name.
+**Parameters:**
+- `_customer`: The address of the customer.
+- `_amount`: The amount to add to the customer's balance.
 
-### `addMoney(address _address, uint256 _amount) public`
+### BuyItem
 
-Adds money to the specified customer's balance and updates the total funds.
+```solidity
+function BuyItem(address _customer, uint256 _amount) public
+```
 
-### `buyItem(address _address, uint256 _amount) public`
+- Allows a customer to buy an item if they have sufficient balance.
+- Deducts the item's price from the customer's balance.
+- Reduces the total funds in the contract.
+- Awards bonus coins if the spent amount is greater than 50.
 
-Buys an item by deducting the specified amount from the customer's balance and the total funds.
+**Parameters:**
+- `_customer`: The address of the customer.
+- `_amount`: The price of the item being purchased.
+
+### checkDiscount
+
+```solidity
+function checkDiscount(address _customer) public view returns(uint256)
+```
+
+- Checks if the customer is eligible for a discount.
+- Returns `1` if eligible, otherwise returns `0`.
+
+**Parameters:**
+- `_customer`: The address of the customer.
+
+**Returns:**
+- `uint256`: `1` if eligible for a discount, `0` otherwise.
+
+### DiscountPrice
+
+```solidity
+function DiscountPrice(address _customer, uint _amount) public
+```
+
+- Calculates the discounted price of an item based on the customer's bonus coins.
+- Updates the `newprice` with the discounted amount.
+
+**Parameters:**
+- `_customer`: The address of the customer.
+- `_amount`: The original price of the item.
+
+### getBonusCoins
+
+```solidity
+function getBonusCoins() public view returns (uint256)
+```
+
+- Returns the bonus coins of the customer after the last purchase.
+
+**Returns:**
+- `uint256`: The number of bonus coins.
+
+### getDiscountPrice
+
+```solidity
+function getDiscountPrice() public view returns (uint256)
+```
+
+- Returns the discounted price of an item after applying the discount.
+
+**Returns:**
+- `uint256`: The discounted price.
+
+### getFunds
+
+```solidity
+function getFunds() public view returns (uint256)
+```
+
+- Returns the total funds available in the supermarket contract.
+
+**Returns:**
+- `uint256`: The total funds.
+
+### getName
+
+```solidity
+function getName() public view returns(string memory)
+```
+
+- Returns the stored customer name.
+
+**Returns:**
+- `string`: The customer's name.
+
+## Usage
+
+1. **Add Money:** Use the `Addmoney` function to deposit funds into a customer's account.
+2. **Buy Item:** Use the `BuyItem` function to purchase an item. If the amount spent is greater than 50, the customer earns 5 bonus coins.
+3. **Check Discount:** Use the `checkDiscount` function to see if the customer qualifies for a discount.
+4. **Calculate Discounted Price:** Use the `DiscountPrice` function to calculate the price after applying the discount.
+5. **Retrieve Details:** Use the `getBonusCoins`, `getDiscountPrice`, `getFunds`, and `getName` functions to retrieve the respective details.
+
+
 
 ## Help
 
