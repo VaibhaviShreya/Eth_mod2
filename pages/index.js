@@ -7,6 +7,9 @@ export default function HomePage() {
   const [account, setAccount] = useState(undefined);
   const [saleprice, setsalesprice] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
+  const [Discount, setDiscount] = useState(undefined);
+  const [Status, setStatus] = useState(undefined );
+   const [supercoins, setsupercoins] = useState(undefined);
   const [customerName , setcustomerName] = useState(undefined);
   const [totaltransaction, settotaltransaction] = useState(0);
   const [itemPrice, setitemPrice] = useState(0);
@@ -15,7 +18,7 @@ export default function HomePage() {
   const [items, setItems] = useState([]);
 
 
-  const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const superMarketABI = marketTokenAbi.abi;
 
   const getWallet = async () => {
@@ -64,7 +67,24 @@ export default function HomePage() {
   console.log(balance);
     }
   };
-
+const getDiscountPrice = async () => {
+    if (saleprice) {
+      setDiscount((await saleprice.getDiscountPrice()).toNumber());
+       if(Discount>0){
+        setitemPrice(Discount);
+       }
+    }
+  };
+  const checkDiscount=async()=>{
+   if (saleprice) {
+      setStatus((await saleprice.checkDiscount(account)).toNumber());
+    }
+  }
+  const getBonusCoins = async () => {
+    if (saleprice) {
+      setsupercoins((await saleprice.getBonusCoins()).toNumber());
+    }
+  };
   const getcustomerName = async () => {
     if (saleprice) {
       setcustomerName(await saleprice.getName());
@@ -86,12 +106,18 @@ export default function HomePage() {
       await tx.wait();
       getFunds();
       getTransaction();
+      getBonusCoins();
       if (BuyItemName.trim()) {
       setItems([...items, BuyItemName]);
       setBuyItemName('');
     }}
   };
- 
+   const DiscountPrice = async () => {
+    if (saleprice && itemPrice > 0) {
+      let tx = await saleprice.DiscountPrice(account, itemPrice);
+      await tx.wait();
+      getDiscountPrice();}
+  };
 
   const getTransaction=async()=>{
     settotaltransaction(totaltransaction+1);
@@ -126,6 +152,7 @@ export default function HomePage() {
         <p>Customer Name : {customerName}</p>
         <p>Total Transaction:{totaltransaction}</p>
         <p>Your Balance: {balance}</p>
+        <p>supercoins:{supercoins}</p>
         <div>
           <input
             type="number"
@@ -150,14 +177,26 @@ export default function HomePage() {
           />
           <button onClick={BuyItem}>Buy Item</button>
         </div>
-        <p>Items Purchased</p>
-       <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {index }-----------------------------{item}
-          </li>
-        ))}
-      </ul>
+       <fieldset>
+          <legend>Supermarket Discounts and Purchases</legend>
+          <section className="discount-section">
+            <h2>Discount Details</h2>
+             <button onClick={checkDiscount}>Check Discount</button>
+             <p>Status :{Status}</p>
+            <button onClick={DiscountPrice}>Get Discount Price</button>
+            <p>Discount Price: <strong>{Discount}</strong></p>
+          </section>
+          <section className="purchased-items-section">
+            <h2>Items Purchased</h2>
+            <ol>
+              {items.map((item, index) => (
+                <li key={index}>
+                  {index + 1}. {item}
+                </li>
+              ))}
+            </ol>
+          </section>
+        </fieldset>
         
       </div>
     );
